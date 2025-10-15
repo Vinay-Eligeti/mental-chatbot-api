@@ -11,7 +11,11 @@ encoded_key = os.getenv("GROQ_API_KEY_BASE64")
 if not encoded_key:
     raise ValueError("GROQ_API_KEY_BASE64 not found in environment variables.")
 
-# Decode the key
+# Fix missing padding automatically
+missing_padding = len(encoded_key) % 4
+if missing_padding:
+    encoded_key += '=' * (4 - missing_padding)
+
 api_key = base64.b64decode(encoded_key).decode("utf-8")
 
 # ---------- Groq Client ----------
