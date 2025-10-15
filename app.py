@@ -2,21 +2,10 @@ from flask import Flask, request, jsonify
 from openai import OpenAI
 import re
 import os
-import base64
 
 app = Flask(__name__)
-# Get the Base64 encoded key
-encoded_key = os.getenv("GROQ_API_KEY_BASE64")
 
-if not encoded_key:
-    raise ValueError("GROQ_API_KEY_BASE64 not found in environment variables.")
-
-# Fix missing padding automatically
-missing_padding = len(encoded_key) % 4
-if missing_padding:
-    encoded_key += '=' * (4 - missing_padding)
-
-api_key = base64.b64decode(encoded_key).decode("utf-8")
+api_key = os.getenv("GROQ_API_KEY_BASE64")
 
 # ---------- Groq Client ----------
 client = OpenAI(
